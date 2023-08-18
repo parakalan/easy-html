@@ -1,6 +1,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+<script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
 
 
 <style>
@@ -48,12 +49,8 @@ body {
 }
 
 .download-svg:hover {
-    background-color: #1f2328; /* Fills with a color when hovered */
+    background-color: white; /* Fills with a color when hovered */
 }
-
-/*.download-svg:hover g {
-  fill: white;
-}*/
 
 .download-svg:hover { 
     filter: invert(100%); 
@@ -102,6 +99,12 @@ body {
     animation: spin 1s linear infinite;
 }
 
+/*    #editor {
+        width: 100%;
+        height: 100%;
+        display: none;
+    }
+*/
 
 </style>
 <body>
@@ -119,10 +122,20 @@ body {
         <svg class="submit-svg" fill="none" height="40" viewBox="0 0 24 24" width="40" xmlns="http://www.w3.org/2000/svg"><g clip-rule="evenodd" fill="#1f2328" fill-rule="evenodd"><path d="m20 20v-16h-16v16zm-1.5-1.5h-2.5v-13h2.5zm-4-13v13h-9v-13z"/><path d="m10.4434 12.0041-2.47373-2.47377 1.06066-1.06066 3.53437 3.53443-3.53372 3.5337-1.06066-1.0607z"/></g>
         </svg>
       </div>
-      <svg id="downloadButton" class="download-svg" style="margin-left: 3%;" xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" /> </svg>
+    <svg id="downloadButton" class="download-svg"  style="margin-left: 3%;" width="38" height="38" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 18L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M12 6V14M12 14L15.5 10.5M12 14L8.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M3 20.4V3.6C3 3.26863 3.26863 3 3.6 3H20.4C20.7314 3 21 3.26863 21 3.6V20.4C21 20.7314 20.7314 21 20.4 21H3.6C3.26863 21 3 20.7314 3 20.4Z" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+
+
+
+<svg id="textEditorButton" class="download-svg" style="margin-left: 3%;" fill="none" height="38" viewBox="0 0 24 24" width="38" xmlns="http://www.w3.org/2000/svg"><g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m7 8-4 4 4 4"/><path d="m17 8 4 4-4 4"/><path d="m14 4-4.1411 15.4548"/></g></svg>
+
       <div class="AIChat" style="color: #2C2C2E; font-size: 2em; font-weight: 600; word-wrap: break-word; margin-left: 20%;">🦄 Janet</div>
       </div>
       
+      <!-- <div id="editor"></div> -->
       <div class="MessageBubbles" style="overflow-y: auto; max-height: 80%;">
         <div class="loader"></div>
       </div>
@@ -141,16 +154,19 @@ body {
 <script type="text/javascript">
 
   let currentHtmlContent = "";
+  // var editor = ace.edit("editor");
+
+  let isTextEditorOpen = false;
 
   function displayHTMLInIframe(htmlString) {
-  const iframe = document.getElementById('htmlPreviewIframe');
-  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      const iframe = document.getElementById('htmlPreviewIframe');
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      
 
-  // You may wish to sanitize the HTML here too, just as a precaution
-  iframeDoc.open();
-  iframeDoc.write(htmlString);
-  iframeDoc.close();
-}
+      iframeDoc.open();
+      iframeDoc.write(htmlString);
+      iframeDoc.close();
+    }
 
 
   let chatHistory = [{
@@ -347,7 +363,7 @@ function sendMessageToAI(userMessage) {
     // Add the user's message to chat history
     chatHistory.push({
         'role': 'system',
-        'content': 'The user has the following query. Give HTML code and user response for the following JSON format.\n{\n"user_response": <Response to show to user>, "html_code": <HTML Code, if any>\n}. You cannot link external sheets, only single page HTMLs. Do not add newlines to indent please. Stick to the format, no other format is acceptable. ONLY RETURN A JSON AND NOTHING ELSE'
+        'content': 'The user has the following query. Give HTML code and user response for the following JSON format.\n{\n"user_response": <Response to show to user>, "html_code": <HTML Code, if any>\n}. You cannot link external sheets, only single page HTMLs. Do not add newlines to indent please. Stick to the format, no other format is acceptable. Do not add semicolon, your HTML is displayed in preview window. ONLY RETURN A JSON AND NOTHING ELSE'
     })
     chatHistory.push({
         role: 'user',
@@ -433,6 +449,20 @@ toggleButton.addEventListener('click', function() {
 
  document.getElementById('downloadButton').addEventListener('click', function() {
     downloadHTMLFile();
+});
+
+ function closeTextEditor() {
+    document.getElementById('editor').style.display = 'none';
+    document.getElementById('editor').style.display
+ }
+
+  document.getElementById('textEditorButton').addEventListener('click', function() {
+   if(isTextEditorOpen) {
+    closeTextEditor();
+   } 
+   else {
+    openTextEditor();
+   }
 });
 </script>
 
