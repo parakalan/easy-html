@@ -1,469 +1,60 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-<script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
+<html>
+    <title>Janet</title>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
+        <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src='http://lovasoa.github.io/tidy-html5/tidy.js'></script>
+        <script src="src/mode-html.js" type="text/javascript" charset="utf-8"></script>
 
-
-<style>
-  .LetTheMagicBeginAskAQuestion {
-    color: white;
-    font-size: 1em;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
-    word-wrap: break-word;
-    border: none;          /* Remove the default border */
-    outline: none;         /* Remove the blue outline when focused */
-    resize: none;          /* Disable textarea resizing */
-    background: transparent; /* Make the background transparent */
-/*    overflow: hidden;       /* Hide scrollbar */*/
-    width: 100%;           /* Take the full width of the parent */
-    max-height: 200px;
-    overflow-y: auto; 
-}
-
-body {
-  overflow: hidden;
-  font-family: 'Open Sans', sans-serif;
-}
-
-.svg-container {
-    cursor: pointer;
-}
-
-.submit-svg {
-    cursor: pointer;
-    transition: filter 0.3s, background-color 0.3s;
-}
-
-.submit-svg:hover {
-    background-color: #1f2328; /* Fills with a color when hovered */
-}
-
-.submit-svg:hover g {
-  fill: white;
-}
-
-.download-svg {
-    cursor: pointer;
-    transition: filter 0.3s, background-color 0.3s;
-}
-
-.download-svg:hover {
-    background-color: white; /* Fills with a color when hovered */
-}
-
-.download-svg:hover { 
-    filter: invert(100%); 
-} 
-
-.MessageFrame {
-    transition: width 0.3s, margin-left 0.3s;
-}
-
-#toggleButton {
-  transition: transform 0.8s ease;
-}
-
-.html-preview-iframe {
-  width: 50%; 
-  height: 100vh;
-  border: none;
-  border-right: 1px solid #ccc;
-  float: left; 
-}
-
-.userMessage {
-  background-color: blue;
-}
-
-.assistantMessage {
-  background-color: gray;
-}
-
-@keyframes spin {
-    0% {
-         transform: rotate(0deg);
-    }
-    100% {
-         transform: rotate(360deg);
-    }
-}
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #000;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    margin: auto;
-    margin-top: 20%;
-    animation: spin 1s linear infinite;
-}
-
-/*    #editor {
-        width: 100%;
-        height: 100%;
-        display: none;
-    }
-*/
-
-</style>
+    </head>
 <body>
-<div class="Container" style="width: 100%; height: 100%">
-   <div id="previewFrame" class="previewFrame" style="width: 65%; height: 100%">
-    <iframe id="htmlPreviewIframe" style="width: 100%; height: 100%" class="html-preview-iframe" srcdoc="<!DOCTYPE html><html><head><style>body {display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: white; color: grey; font-size: small;}</style></head><body><p>Your site will appear here</p></body></html>">
-    </iframe>
-   </div>
-
-   <div class="MessageFrame" style="width: 35%; height: 100%; margin-left: 64%; top: -1px; position: absolute; background: white; box-shadow: 0px 5.045040607452393px 25.225202560424805px rgba(0, 0, 0, 0.15); border-radius: 5.63px;overflow: hidden">
-      
-      <!-- Header, declare what this side is -->
-      <div class="Header" style="display: flex;width: 100%; top: 5px; position: relative; border-bottom: 1px solid #ccc;">
-      <div class="svg-container" id="toggleButton" style="float: left;">  
-        <svg class="submit-svg" fill="none" height="40" viewBox="0 0 24 24" width="40" xmlns="http://www.w3.org/2000/svg"><g clip-rule="evenodd" fill="#1f2328" fill-rule="evenodd"><path d="m20 20v-16h-16v16zm-1.5-1.5h-2.5v-13h2.5zm-4-13v13h-9v-13z"/><path d="m10.4434 12.0041-2.47373-2.47377 1.06066-1.06066 3.53437 3.53443-3.53372 3.5337-1.06066-1.0607z"/></g>
-        </svg>
-      </div>
-    <svg id="downloadButton" class="download-svg"  style="margin-left: 3%;" width="38" height="38" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 18L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M12 6V14M12 14L15.5 10.5M12 14L8.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M3 20.4V3.6C3 3.26863 3.26863 3 3.6 3H20.4C20.7314 3 21 3.26863 21 3.6V20.4C21 20.7314 20.7314 21 20.4 21H3.6C3.26863 21 3 20.7314 3 20.4Z" stroke="currentColor" stroke-width="1.5"/>
-    </svg>
-
-
-
-<svg id="textEditorButton" class="download-svg" style="margin-left: 3%;" fill="none" height="38" viewBox="0 0 24 24" width="38" xmlns="http://www.w3.org/2000/svg"><g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m7 8-4 4 4 4"/><path d="m17 8 4 4-4 4"/><path d="m14 4-4.1411 15.4548"/></g></svg>
-
-      <div class="AIChat" style="color: #2C2C2E; font-size: 2em; font-weight: 600; word-wrap: break-word; margin-left: 20%;">🦄 Janet</div>
-      </div>
-      
-      <!-- <div id="editor"></div> -->
-      <div class="MessageBubbles" style="overflow-y: auto; max-height: 80%;">
-        <div class="loader"></div>
-      </div>
-      <!-- Footer, for the Chat text area -->
-      
-      <div class="Footer" style="width: 100%; position: absolute; background: white; bottom: 10">
-         <div class="PromptBox" style="width: 93%; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; background: #1D1D1F; border-radius: 10px; overflow: hidden; justify-content: space-between; align-items: center; gap: 10px; display: inline-flex">
-            <textarea id="inputArea" class="LetTheMagicBeginAskAQuestion" style="height: 59px; padding-top: 3%; font-size: 1.1em;width: 100%;caret-color: white; color: white; font-weight: 400; word-wrap: break-word" placeholder="Ask Janet..."></textarea>
-            <div class="sendButton" style="border-radius: 10px;"><img src="send.png"></div>
-          </div>
-      </div>
-
-      </div>
-   </div>
-</div>
-<script type="text/javascript">
-
-  let currentHtmlContent = "";
-  // var editor = ace.edit("editor");
-
-  let isTextEditorOpen = false;
-
-  function displayHTMLInIframe(htmlString) {
-      const iframe = document.getElementById('htmlPreviewIframe');
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      
-
-      iframeDoc.open();
-      iframeDoc.write(htmlString);
-      iframeDoc.close();
-    }
-
-
-  let chatHistory = [{
-    role: 'system',
-    content: 'You are a HTML assistant. You write HTML pages for people. Follow the instructions'
-}];
-  
-  document.addEventListener("input", function(event) {
-    if (event.target.tagName.toLowerCase() === "textarea") {
-        autoResize(event.target);
-        
-    }
-});
-
-function autoResize(textarea) {
-    textarea.style.height = "auto";                // Reset the height
-    textarea.style.height = textarea.scrollHeight + "px";   // Set it to its scroll height
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    const textareas = document.querySelectorAll('textarea');
-    textareas.forEach(autoResize);
-});
-
-function resetSendButton() {
-   const elements = document.querySelectorAll('.sendButton');
-    elements.forEach(element => {
-        element.style.backgroundColor = '';
-    });
-}
-
-function showLoading() {
-  document.getElementsByClassName('loader')[0].style.display = 'block';
-}
-
-function unShowLoading() {
-  document.getElementsByClassName('loader')[0].style.display = 'none';
-}
-unShowLoading();
-addNewMessage("Hi! I'm Janet. I'm here to write HTML for you. Just ask me something and I will get to building it for you.", "assistant")
-
-const textarea = document.getElementById('inputArea');
-
-// Add an input event listener to the textarea
-textarea.addEventListener('input', function() {
-    // Check if the textarea has content
-    if (textarea.value.trim()) {
-        const elements = document.querySelectorAll('.sendButton');
-        elements.forEach(element => {
-            element.style.backgroundColor = 'purple';
-        });
-    } else {
-        resetSendButton();
-    }
-});
-
-textarea.addEventListener('keydown', function(event) {
-    // If the key pressed is "Enter"
-    if (event.key === "Enter") {
-        // If the "Shift" key is also being held down
-        if (event.shiftKey) {
-            // Simply insert a new line (default behavior)
-            return;
-        } else {
-            // If only "Enter" was pressed, prevent the new line and send the message
-            event.preventDefault();  // Prevent the default action (inserting a new line)
-            const message = textarea.value.trim();
-
-            if (message) { 
-                sendButtonClick();
-            }
-        }
-    }
-});
-
-
-function addNewMessage(message, type) {
-    const messageBubbles = document.querySelector('.MessageBubbles');
-
-    // Create the TextFrame div
-    const newTextFrame = document.createElement('div');
-    newTextFrame.className = 'TextFrame ' + type + "Message"; 
-    newTextFrame.style.width = '96%';
-    newTextFrame.style.position = 'relative';
-    // newTextFrame.style.background = '#1D1D1F';
-    newTextFrame.style.borderRadius = '10px';
-    newTextFrame.style.overflow = 'hidden';
-    newTextFrame.style.padding = '10px';  // Added for spacing within each message
-    newTextFrame.style.marginTop = '20px';  // spacing between each TextFrame
-
-    // Create the chat bubble div
-    const chatBubble = document.createElement('div');
-    chatBubble.style.textAlign = 'left';
-    chatBubble.style.color = 'white';
-    chatBubble.style.fontSize = '1em';
-    chatBubble.style.fontWeight = '400';
-    chatBubble.style.wordWrap = 'break-word';
-    
-    // Set the message
-    chatBubble.innerText = message;
-
-    // Append chat bubble to TextFrame
-    newTextFrame.appendChild(chatBubble);
-    
-    // Append the new TextFrame to the MessageFrame
-    // messageFrame.insertBefore(newTextFrame, messageFrame.querySelector('.Footer'));
-    messageBubbles.insertBefore(newTextFrame, messageBubbles.querySelector('.loader'));
-
-}
-
-function sendButtonClick() {
-  const textarea = document.getElementById('inputArea');
-    const message = textarea.value.trim();
-
-    if (message) { // check if the message is not just whitespace
-        addNewMessage(message, 'user');
-        sendMessageToAI(message);
-        showLoading();
-        textarea.value = '';  // Clear the input after sending the message
-        autoResize(textarea);
-        resetSendButton();
-    }
-}
-
-const sendButton = document.querySelector('.sendButton');
-sendButton.addEventListener('click', function() {
-    sendButtonClick();
-});
-
-// Reference to the toggle button
-const toggleButton = document.getElementById('toggleButton');
-
-// Reference to the chat container
-const chatWindow = document.querySelector('.MessageFrame');
-const messageFrame = document.querySelector('.MessageFrame');
-
-
-function hideEverythingElseChatWindow() {
-  // Check if both elements are present in the DOM
-  if (messageFrame && toggleButton) {
-      // Loop over all child elements of the parent container
-      for (let child of messageFrame.children) {
-          // Hide the child element
-          child.style.display = 'none';
-      }
-
-      for (let child of toggleButton.parentElement.children) {
-          // Hide the child element
-          child.style.display = 'none';
-      }
-
-      // Show the button and its direct parent
-      toggleButton.style.display = 'block';
-      toggleButton.parentElement.style.display = 'flex';  // This assumes the button is a direct child of the parent container
-  }
-}
-
-function showEverythingElseChatWindow() {
-  // Check if both elements are present in the DOM
-  if (messageFrame && toggleButton) {
-      // Loop over all child elements of the parent container
-      for (let child of messageFrame.children) {
-          // Hide the child element
-          if(child.className == "MessageBubbles") {
-            child.style.display = 'block';
-          }
-          else {
-            child.style.display = 'flex';
-          }
-      }
-
-      for (let child of toggleButton.parentElement.children) {
-          // Hide the child element
-          child.style.display = '';
-      }
-  }
-}
-
-function downloadHTMLFile() {
-  filename = "export.html";
-  content = currentHtmlContent;
-  const blob = new Blob([content], { type: 'text/html' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);  
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(a.href);
-}
-
-
-function sendMessageToAI(userMessage) {
-    // Add the user's message to chat history
-    chatHistory.push({
-        'role': 'system',
-        'content': 'The user has the following query. Give HTML code and user response for the following JSON format.\n{\n"user_response": <Response to show to user>, "html_code": <HTML Code, if any>\n}. You cannot link external sheets, only single page HTMLs. Do not add newlines to indent please. Stick to the format, no other format is acceptable. Do not add semicolon, your HTML is displayed in preview window. ONLY RETURN A JSON AND NOTHING ELSE'
-    })
-    chatHistory.push({
-        role: 'user',
-        content: 'User query: ' + userMessage
-    });
-
-    // API call
-    fetch('https://api.sudhar.xyz/complete', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            model: 'gpt-3.5-turbo-16k',
-            messages: chatHistory,
-            temperature: 1,
-            max_tokens: 6997,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-        let aiMessage = data.choices[0].message.content;
-        aiMessage = aiMessage.replaceAll('\n', '');
-        console.log(aiMessage);
-        jsonResponseFromAi = JSON.parse(aiMessage);
-        console.log(jsonResponseFromAi);
-
-        let responseForUser = jsonResponseFromAi.user_response;
-        let htmlResponse = jsonResponseFromAi.html_code;
-
-        if(htmlResponse) {
-          htmlResponse = htmlResponse.replaceAll('\n', '');
-        }
-        console.log(htmlResponse);
-
-
-        // Push AI's response to chat history
-        chatHistory.push({
-            role: 'assistant',
-            content: aiMessage
-        });
-
-        // Display the AI's response in the chat UI
-        // For instance, if you have a function named 'displayMessage':
-        currentHtmlContent = htmlResponse;
-        addNewMessage(responseForUser, 'assistant');
-        displayHTMLInIframe(htmlResponse);
-        console.log(chatHistory);
-        unShowLoading()
-    })
-    .catch(error => {
-        console.error("Error sending message:", error);
-    });
-}
-
-
-
-// Add the event listener to the toggle button
-toggleButton.addEventListener('click', function() {
-    if (chatWindow.style.width !== '3%') {
-        // If it's not minimized, minimize it.
-        chatWindow.style.width = '3%';
-        chatWindow.style.marginLeft = '97%';
-        chatWindow.style.overflow = 'hidden'; // Hide content when minimized
-        toggleButton.style.transform = 'rotate(-180deg)'
-        hideEverythingElseChatWindow();
-        document.getElementById('previewFrame').style.width = '97%';
-        
-    } else {
-        // If it is minimized, maximize it.
-        chatWindow.style.width = '35%';
-        chatWindow.style.marginLeft = '64%';
-        chatWindow.style.overflow = 'visible'; // Show content when maximized
-        toggleButton.style.transform = '';
-        showEverythingElseChatWindow();
-        document.getElementById('previewFrame').style.width = '65%';
-    }
-});
-
- document.getElementById('downloadButton').addEventListener('click', function() {
-    downloadHTMLFile();
-});
-
- function closeTextEditor() {
-    document.getElementById('editor').style.display = 'none';
-    document.getElementById('editor').style.display
- }
-
-  document.getElementById('textEditorButton').addEventListener('click', function() {
-   if(isTextEditorOpen) {
-    closeTextEditor();
-   } 
-   else {
-    openTextEditor();
-   }
-});
-</script>
-
+	<div class="Container" style="width: 100%; height: 100%">
+		<div id="previewFrame" class="previewFrame" style="width: 65%; height: 100%">
+			<iframe id="htmlPreviewIframe" style="width: 100%; height: 100%" class="html-preview-iframe" srcdoc="<!DOCTYPE html><html><head><style>body {display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: white; color: grey; font-size: small;}</style></head><body><p>Your site will appear here</p></body></html>">
+			</iframe>
+		</div>
+		<div class="MessageFrame" style="width: 35%; height: 100%; margin-left: 64%; top: -1px; position: absolute; background: white; box-shadow: 0px 5.045040607452393px 25.225202560424805px rgba(0, 0, 0, 0.15); border-radius: 5.63px;overflow: hidden">
+			<!-- Header, declare what this side is -->
+			<div class="Header" style="display: flex;width: 100%; top: 5px; position: relative; border-bottom: 1px solid #ccc;">
+				<div class="svg-container" id="toggleButton" style="float: left;">
+					<svg class="submit-svg" fill="none" height="40" viewBox="0 0 24 24" width="40" xmlns="http://www.w3.org/2000/svg">
+						<g clip-rule="evenodd" fill="#1f2328" fill-rule="evenodd">
+							<path d="m20 20v-16h-16v16zm-1.5-1.5h-2.5v-13h2.5zm-4-13v13h-9v-13z"/>
+							<path d="m10.4434 12.0041-2.47373-2.47377 1.06066-1.06066 3.53437 3.53443-3.53372 3.5337-1.06066-1.0607z"/>
+						</g>
+					</svg>
+				</div>
+				<svg id="downloadButton" class="download-svg"  style="margin-left: 3%;" width="38" height="38" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M6 18L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M12 6V14M12 14L15.5 10.5M12 14L8.5 10.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M3 20.4V3.6C3 3.26863 3.26863 3 3.6 3H20.4C20.7314 3 21 3.26863 21 3.6V20.4C21 20.7314 20.7314 21 20.4 21H3.6C3.26863 21 3 20.7314 3 20.4Z" stroke="currentColor" stroke-width="1.5"/>
+				</svg>
+				<svg id="textEditorButton" class="download-svg" style="margin-left: 3%;" fill="none" height="38" viewBox="0 0 24 24" width="38" xmlns="http://www.w3.org/2000/svg">
+					<g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+						<path d="m7 8-4 4 4 4"/>
+						<path d="m17 8 4 4-4 4"/>
+						<path d="m14 4-4.1411 15.4548"/>
+					</g>
+				</svg>
+				<div class="AIChat unselectable" style="user-select: none; color: #2C2C2E; font-size: 2em; font-weight: 600; word-wrap: break-word; margin-left: 20%;">🦄 Janet</div>
+			</div>
+			<div id="editor"></div>
+			<div class="MessageBubbles" style="overflow-y: auto; max-height: 80%; padding-left: 2%; padding-right: 2%;">
+				<div class="loader"></div>
+			</div>
+			<!-- Footer, for the Chat text area -->
+			<div class="Footer" style="width: 96%; position: absolute; background: white; bottom: 10; padding-left: 2%;">
+				<div class="PromptBox" style="width: 93%; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; background: #1D1D1F; border-radius: 10px; overflow: hidden; justify-content: space-between; align-items: center; gap: 10px; display: inline-flex">
+					<textarea id="inputArea" class="LetTheMagicBeginAskAQuestion" style="height: 59px; padding-top: 3%; font-size: 1.1em;width: 100%;caret-color: white; color: white; font-weight: 400; word-wrap: break-word" placeholder="Ask Janet..."></textarea>
+					<div class="sendButton" style="border-radius: 10px;"><img src="send.png"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script src="script.js" type="text/javascript"></script>
 </body>
+</html>

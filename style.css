@@ -1,0 +1,91 @@
+.LetTheMagicBeginAskAQuestion {
+    color: white;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    word-wrap: break-word;
+    border: none;          /* Remove the default border */
+    outline: none;         /* Remove the blue outline when focused */
+    resize: none;          /* Disable textarea resizing */
+    background: transparent; /* Make the background transparent */
+    /*    overflow: hidden;       /* Hide scrollbar */
+    width: 100%;           /* Take the full width of the parent */
+    max-height: 200px;
+    overflow-y: auto; 
+}
+body {
+    overflow: hidden;
+    font-family: 'Open Sans', sans-serif;
+}
+.svg-container {
+    cursor: pointer;
+}
+.submit-svg {
+    cursor: pointer;
+    transition: filter 0.3s, background-color 0.3s;
+}
+.submit-svg:hover {
+    background-color: #1f2328; /* Fills with a color when hovered */
+}
+.submit-svg:hover g {
+    fill: white;
+}
+.download-svg {
+    cursor: pointer;
+    transition: filter 0.3s, background-color 0.3s;
+}
+.download-svg:hover {
+    background-color: white; /* Fills with a color when hovered */
+}
+.download-svg:hover { 
+    filter: invert(100%); 
+} 
+.MessageFrame {
+    transition: width 0.3s, margin-left 0.3s;
+}
+#toggleButton {
+    transition: transform 0.8s ease;
+}
+.html-preview-iframe {
+    width: 50%; 
+    height: 100vh;
+    border: none;
+    border-right: 1px solid #ccc;
+    float: left; 
+}
+.userMessage {
+    background-color: blue;
+}
+.assistantMessage {
+    background-color: gray;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #000;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    margin-top: 20%;
+    animation: spin 1s linear infinite;
+}
+#editor {
+    width: 100%;
+    height: 100%;
+}
+
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
