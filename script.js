@@ -39,7 +39,13 @@ let editor_options = {
 let chatHistory = [{
     role: 'system',
     content: 'You are a HTML assistant. You write HTML pages for people. Follow the instructions'
+  },
+  {
+      'role': 'system',
+      'content': 'The user has the following query. Give HTML code and user response for the following JSON format. You have to make it look nice, make it look good not like shit.\n{\n"user_response": <Response to show to user>, "html_code": <HTML Code, if any>\n}. You cannot link external sheets, only single page HTMLs. Do not add newlines to indent please. Stick to the format, no other format is acceptable. Do not add semicolon, your HTML is displayed in preview window. ONLY RETURN A JSON AND NOTHING ELSE'
   }];
+
+chatHistory.push()
 
 function displayHTMLInIframe(htmlString) {
     const iframe = document.getElementById('htmlPreviewIframe');
@@ -232,10 +238,13 @@ function downloadHTMLFile() {
 
 function sendMessageToAI(userMessage) {
   // Add the user's message to chat history
-  chatHistory.push({
-      'role': 'system',
-      'content': 'The user has the following query. Give HTML code and user response for the following JSON format. You have to make it look nice, make it look good not like shit.\n{\n"user_response": <Response to show to user>, "html_code": <HTML Code, if any>\n}. You cannot link external sheets, only single page HTMLs. Do not add newlines to indent please. Stick to the format, no other format is acceptable. Do not add semicolon, your HTML is displayed in preview window. ONLY RETURN A JSON AND NOTHING ELSE'
-  })
+  if(chatHistory.length > 1) {
+      chatHistory.push({
+        'role': 'system',
+        'content': 'The user has a follow up query, remember the context. This is the format\n{\n"user_response": <Response to show to user>, "html_code": <HTML Code, if any>\n}. You cannot link external sheets, only single page HTMLs. DO NOT ADD COMMENTS. Do not add newlines to indent please. Stick to the format, no other format is acceptable. Do not add semicolon, your HTML is displayed in preview window. ONLY RETURN A JSON AND NOTHING ELSE'
+    })
+  }
+
   chatHistory.push({
       role: 'user',
       content: 'User query: ' + userMessage
